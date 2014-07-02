@@ -7,26 +7,6 @@
     <name>maven-cucumber-reporting</name>
     <url>http://maven.apache.org</url>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
-    <repositories>
-        <repository>
-            <id>repo.bodar.com</id>
-            <url>http://repo.bodar.com</url>
-        </repository>
-    </repositories>
-
-    <scm>
-        <connection>scm:git:git@github.com:masterthought/maven-cucumber-reporting-mojo.git</connection>
-        <developerConnection>scm:git:git@github.com:masterthought/maven-cucumber-reporting-mojo.git
-        </developerConnection>
-        <url>git@github.com:masterthought/maven-cucumber-reporting-mojo.git</url>
-    </scm>
-
     <description>
         This project provides a maven mojo for using cucumber-reporting to publish pretty html reports for Cucumber.
         It works by generating html from the cucumber json report formatter.
@@ -135,5 +115,16 @@
             <artifactId>totallylazy</artifactId>
             <version>991</version>
         </dependency>
-    </dependencies>
+	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<url>http://nexus.paypal.com/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>libs-snapshots</id>
+			<url>http://nexus.paypal.com/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>

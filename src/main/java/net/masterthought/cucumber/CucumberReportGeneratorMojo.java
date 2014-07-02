@@ -5,10 +5,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Goal which generates a Cucumber Report.
@@ -37,7 +34,7 @@ public class CucumberReportGeneratorMojo extends AbstractMojo {
     /**
      * Location of the file.
      *
-     * @parameter expression="${project.build.directory}/cucumber.json"
+     * @parameter expression="${cuc.output}" default-value=${project.build.directory}/cucumber.json"
      * @required
      */
     private File cucumberOutput;
@@ -67,13 +64,19 @@ public class CucumberReportGeneratorMojo extends AbstractMojo {
     private Boolean enableFlashCharts;
 
     public void execute() throws MojoExecutionException {
-        if (!outputDirectory.exists()) {
-            outputDirectory.mkdirs();
-        }
-
         List<String> list = new ArrayList<String>();
 		for (File jsonFile : cucumberFiles(cucumberOutput)) {
 			list.add(jsonFile.getAbsolutePath());
+		}
+
+		if (list.isEmpty()) {
+			getLog().info("No .json files could be found in " +
+					cucumberOutput.getAbsolutePath() + ".  No report will be generated.");
+			return;
+		}
+
+		if (!outputDirectory.exists()) {
+			outputDirectory.mkdirs();
 		}
 
         try {
@@ -97,7 +100,7 @@ public class CucumberReportGeneratorMojo extends AbstractMojo {
 	static Collection<File> cucumberFiles(File file) throws MojoExecutionException {
 		// I'm not entirely convinced we should break the build in this case.
 		if (!file.exists()) {
-			throw new MojoExecutionException(file.getAbsolutePath() + " does not exist.");
+			return Collections.emptyList();
 		}
 		if (file.isFile()) {
 			return Arrays.asList(file);
